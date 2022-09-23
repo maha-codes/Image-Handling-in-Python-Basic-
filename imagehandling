@@ -1,0 +1,255 @@
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+print("IMAGE HANDLING IN PYTHON")
+
+#Function 1
+def image():
+    print("We first have to download images from Google")
+
+    #Image Download
+
+    # importing google_images_download module
+    from google_images_download import google_images_download
+
+    # creating object
+    response = google_images_download.googleimagesdownload()
+
+    link1 = input("Enter image keyword to be downloaded:")
+    link2 = input("Enter image keyword to be downloaded:")
+    link3 = input("Enter image keyword to be downloaded:")
+
+    search_queries = [
+
+        link1,
+        link2,
+        link3,
+
+    ]
+
+    def downloadimages(query):
+        # keywords is the search query
+        # format is the image file format
+        # limit is the number of images to be downloaded
+        # print urs is to print the image file url
+        # size is the image size which can
+        # be specified manually ("large, medium, icon")
+        # aspect ratio denotes the height width ratio
+        # of images to download. ("tall, square, wide, panoramic")
+        limit = int(input("Enter number of images to be downloaded:"))
+        arguments = {"keywords": query,
+                     "format": "jpg",
+                     "limit": limit,
+                     "print_urls": True,
+                     "size": "medium",
+                     "aspect_ratio": "panoramic"}
+        try:
+            response.download(arguments)
+
+        except:
+            pass
+
+    for query in search_queries:
+        downloadimages(query)
+        print()
+
+    img_link1 = input("Paste the link of first image:")
+    img_link2 = input("Paste the link of second image:")
+    img_link3 = input("Paste the link of third image:")
+
+    image1= Image.open(img_link1,'r')
+    image2= Image.open(img_link2,'r')
+    image3= Image.open(img_link3,'r')
+
+    s= input("Enter 'yes' or 'no' (Image Processing):")
+    while s!='no':
+        print("IMAGE PROCESSING")
+        print("1. Displaying the Image")
+        print("2. Printing the Size of the Image")
+        print("3. Rotating an Image")
+        print("4. Cropping an Image")
+        print("5. Changing the Dimensions of Image")
+        print("6. Flipping an Image")
+        print("7. Pixel Count for the Image")
+        print("8. Pasting of two Images")
+        print("9. Changing colour of Image")
+        print("10. Blend of two Images")
+        print("11. Blending of Images using Transparency Mask")
+        print("12. Bands in the Image")
+        print("13. Contents of Image")
+        print("14. Min and Max Pixel Values")
+        print("15. Blurring Image")
+        print("16. Outline of Image")
+        print("17. Embossed Image")
+        print("18. Edge Contrast")
+        print("19. Sharpening Image")
+
+        option = int(input("Enter your option (1 to 19):"))
+
+        if option==1:
+            print("The show() method displays an image.")
+            image1.show()                                                      # Displaying an Image
+
+        elif option==2:
+            print("The size() method returns the Size of an image in the form of a tuple of width and height")
+            x = image1.size
+            print("Size of image=", x)                                        # Returning the Size of an Image
+
+        elif option==3:
+            print("The rotate() method takes number of degrees as a parameter and rotates the image to the number of degrees specified.")
+            angle = int(input("Enter any angle not more than 360:"))          # Angle of rotation
+            rotate_img = image1.rotate(angle)
+            rotate_img.show()
+
+        elif option==4:
+            print("The crop() method returns the rectangular portion of the image that has been cropped.")
+            print("It involves the parameters that define the left, upper, right, and lower pixel coordinates to be cropped.")
+            left = int(input("Enter left coordinates pixels:"))
+            upper = int(input("Enter upper coordinates pixels:"))
+            right = int(input("Enter right coordinates pixels:"))
+            lower = int(input("Enter lower coordinates pixels:"))
+            area = (left, upper, right, lower)
+            cropped_img = image1.crop(area)
+            cropped_img.show()
+
+        elif option==5:
+            print("The resize() method returns a resized copy of an image.")
+            width = int(input("Enter new width for image:"))
+            height = int(input("Enter new height for image:"))
+            resized_img = image1.resize((width, height))
+            resized_img.show()
+
+        elif option==6:
+            print("The transpose() method flips an image from left to right or top to bottom.")
+            t= input("Enter 'yes' or 'no' (Transpose options):")
+            while t!='no':
+                print("1. Flipping Top to Bottom")
+                print("2. Flipping Left to Right")
+                ch = int(input("Enter your choice(1 or 2):"))
+                if ch == 1:
+                    transpose1 = image1.transpose(Image.FLIP_TOP_BOTTOM)     # Top to Bottom Flip
+                    transpose1.show()
+                else:
+                    transpose2 = image1.transpose(Image.FLIP_LEFT_RIGHT)     # Left to Right Flip
+                    transpose2.show()
+                    t= input("Enter 'yes' or 'no' (Transpose options):")
+
+        elif option==7:
+            print("The histogram() method returns a list of pixel counts, one for each pixel value in the source image.")
+            print("If the image has more than one band, the histograms for all bands are concatenated.")
+            histogram_img = image1.histogram()
+            print(histogram_img)
+
+        elif option==8:
+            print("The paste() method paste an image over another image.")
+            x = int(input("Enter x coordinates for image to be pasted:"))
+            y = int(input("Enter y coordinates for image to be pasted:"))
+            image1.paste(image2, (x, y))
+            image1.show()
+
+        elif option==9:
+            print("The convert() method changes the colour of an image to Greyscale or Black and White")
+            u = input("Enter 'yes' or 'no' (Conversion options):")
+            while u != 'no':
+                print("1. Conversion to Greyscale")
+                print("2. Conversion to Black and White")
+                ch = int(input("Enter your choice(either 1 or 2):"))
+                if ch == 1:
+                    col_img1 = image1.convert("L")                                # Greyscale
+                    col_img1.show()
+                else:
+                    col_img2 = image1.convert("1")                                # Black and White
+                    col_img2.show()
+                u = input("Enter 'yes' or 'no' (Conversion options):")
+
+        elif option==10:
+            print("The blend() method blends two images together.")
+            print("An alpha channel in an image introduces transparency to the Image.")
+            print("The condition for blending of images is that they should have uniform size.")
+            length = int(input("Enter length of image:"))                     # Common Dimension
+            breadth = int(input("Enter breadth of image:"))                   # Common Dimension
+            p = image1.resize((length, breadth))                              # Resizing the image
+            q = image2.resize((length, breadth))                              # Resizing the image
+            r = p.convert("RGBA")
+            s = q.convert("RGBA")
+            v = input("Enter 'yes' or 'no' (Blend options):")
+            while v != 'no':
+                print("1. Blending of First Image over the Second.")
+                print("2. Blending of Second Image over the First.")
+                choice = int(input("Enter your choice(1 or 2):"))
+                if choice == 1:
+                    print("First Image over Second")
+                    alpha = float(input("Enter alpha value for transparency (<1.0):"))
+                    blend_img1 = Image.blend(r, s, alpha=alpha)               # First image blended with Second image
+                    blend_img1.show()
+                else:
+                    print("Second Image over First")
+                    alpha = float(input("Enter alpha value for transparency (<1.0):"))
+                    blend_img2 = Image.blend(r, s, alpha=alpha)               # Second image blended with First image
+                    blend_img2.show()
+                v = input("Enter 'yes' or 'no' (Blend options):")
+
+        elif option==11:
+            print("The composite() method creates composite image by blending images using a transparency mask.")
+            print("A composite Image is a picture that is made from the combination of multiple images merged into a single surface.")
+            x = int(input("Enter length for the images:"))                      # Common Dimension
+            y = int(input("Enter breadth for the images:"))                     # Common Dimension
+            p = image1.resize((x, y))
+            q = image2.resize((x, y))
+            r = image3.resize((x, y))
+            type = input("Enter the type of image either 1 or L:")           # 1- Black and White image
+            s = p.convert(type)                                              # L- Grey Scale image
+            t = q.convert(type)
+            mask = r.convert(type)
+            composite_img = Image.composite(s, t, mask)
+            composite_img.show()
+
+        elif option==12:
+            print("The getbands() method is used to get the mode(bands) present in an image.")
+            print("The mode of an image defines the type and depth of a pixel in the image.")
+            bands = image1.getbands()
+            print("Modes present=", bands)
+
+        elif option==13:
+            print("The getdata() method returns the contents of an image as a sequence object containing pixel values.")
+            data = Image.Image.getdata(image1)
+            print("Pixel Values=", data)
+
+        elif option==14:
+            print("The getextrema() method returns the minimum and maximum pixel values for each band in the image.")
+            extreme = image1.getextrema()
+            print("Min and Max values=", extreme)
+
+        elif option==15:
+            print("The BLUR() method has a blurring effect on the image.")
+            blurred_img = image1.filter(ImageFilter.BLUR)
+            blurred_img.show()
+
+        elif option==16:
+            print("The CONTOUR() method returns the boundaries or outline of an object in an image.")
+            contour_img = image1.filter(ImageFilter.CONTOUR)
+            contour_img.show()
+
+        elif option==17:
+            print("The meaning of Emboss is to make a mould, a 3d- mould that stands out from the surface.")
+            print("The EMBOSS() method returns an image looks like an emboss - a paper or metal emboss of the Source Image where the features stand out.")
+            emboss_img = image1.filter(ImageFilter.EMBOSS)
+            emboss_img.show()
+
+        elif option==18:
+            print("Edge enhancement enhances the edge contrast of an image.")
+            print("The EDGE_ENHANCE() method returns an image having enhanced edges.")
+            enhanced_img = image1.filter(ImageFilter.EDGE_ENHANCE)
+            enhanced_img.show()
+
+        elif option==19:
+            print("Sharpening an image increases the contrast between bright and dark regions to bring out features.")
+            print("The SHARPEN() method makes the transition between the various regions present in an image more obvious rather than being smooth.")
+            sharpen_img = image1.filter(ImageFilter.SHARPEN)
+            sharpen_img.show()
+
+        else:
+            print("INVALID CHOICE")
+
+        s= input("Enter 'yes' or 'no' (Image Processing):")
+
+    return
