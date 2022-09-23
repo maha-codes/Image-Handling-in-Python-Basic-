@@ -253,3 +253,5 @@ def image():
         s= input("Enter 'yes' or 'no' (Image Processing):")
 
     return
+
+image()
